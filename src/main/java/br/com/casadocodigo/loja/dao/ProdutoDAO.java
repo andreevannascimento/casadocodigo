@@ -1,6 +1,8 @@
 package br.com.casadocodigo.loja.dao;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -47,10 +49,18 @@ public class ProdutoDAO {
         return query.getSingleResult();
     }
 
-    public List<Produto> listarProdutosRelatorio(final Calendar data) {
+    public List<Produto> listarProdutosRelatorio(final String data) throws ParseException {
 
-        return this.manager.createQuery("select distinct(p) from Produto p join fetch p.precos where p.dataLancamento > :data", Produto.class)
-                        .setParameter("data", data)
+        String where = "";
+        final Calendar c = Calendar.getInstance();
+        if (data == null) {
+            where = "where :data = :data";
+        } else {
+            c.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(data));
+            where = "where p.dataLancamento > :data";
+        }
+        return this.manager.createQuery("select distinct(p) from Produto p join fetch p.precos " + where, Produto.class)
+                        .setParameter("data", c)
                         .getResultList();
     }
 }

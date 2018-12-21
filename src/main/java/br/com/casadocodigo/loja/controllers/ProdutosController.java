@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -76,7 +75,7 @@ public class ProdutosController {
         return modelAndView;
     }
 
-    @RequestMapping("/detalhe/{id}")
+    @RequestMapping("/{id}")
     public ModelAndView detalhe(@PathVariable("id") final Integer id) {
 
         final ModelAndView modelAndView = new ModelAndView("/produtos/detalhe");
@@ -86,14 +85,6 @@ public class ProdutosController {
 
         modelAndView.addObject("produto", produto);
         return modelAndView;
-    }
-
-    @RequestMapping("/{id}")
-    @ResponseBody
-    public Produto detalheJson(@PathVariable("id") final Integer id) {
-
-        final Produto produto = this.dao.find(id);
-        return produto;
     }
 
     // tratamente de exceção especifica nesse controlador
